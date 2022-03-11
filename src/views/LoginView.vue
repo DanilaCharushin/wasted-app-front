@@ -15,6 +15,9 @@
       <br>
       <button class="btn waves-effect waves-light auth-submit" @click="login">Войти</button>
     </div>
+    <div class="error" v-if="error">
+      {{ error }}
+    </div>
   </div>
 </template>
 
@@ -25,6 +28,7 @@ export default {
     return {
       email: '',
       password: '',
+      error: '',
     }
   },
   methods: {
@@ -34,9 +38,13 @@ export default {
         password: this.password
       }
       console.log(formData)
-      const resp = await this.$store.dispatch('login', formData)
-      console.log(resp)
-
+      try {
+        await this.$store.dispatch('login', formData)
+        await this.$router.push("/")
+      } catch (e) {
+        console.log(e.response)
+        this.error = e.response.status === 401 ? "Пользователь не найден" : e.message
+      }
     },
   },
 }
@@ -62,5 +70,8 @@ h5 {
 button {
   max-width: 150px;
   margin: auto;
+}
+.error {
+  color: red;
 }
 </style>

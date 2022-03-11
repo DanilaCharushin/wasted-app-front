@@ -1,13 +1,15 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
+    <span>{{ token }}</span>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-
 export default {
   name: 'HomeView',
+  data: () => ({
+    token: '',
+  }),
 }
 </script>
