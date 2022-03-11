@@ -1,0 +1,1 @@
+export let server_path = "https://wasted-app-back.herokuapp.com"
