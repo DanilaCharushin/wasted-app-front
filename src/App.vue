@@ -1,7 +1,9 @@
-<template class="wrapper">
-  <Header class="header"/>
-  <router-view class="content"/>
-  <Footer class="footer"/>
+<template>
+  <div id="app" class="wrapper">
+    <Header :key="key" @update="update" class="header"/>
+    <router-view @update="update" class="content" :categoryGroups="categoryGroups" :categories="categories"/>
+    <Footer class="footer"/>
+  </div>
 </template>
 
 <script>
@@ -9,35 +11,44 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export default {
-  name: 'App',
-  components: {
-    Header, Footer
+  components: {Footer, Header},
+  data: () => ({
+    key: 0,
+    categoryGroups: [],
+    categories: [],
+  }),
+  methods: {
+    async update() {
+      this.key += 1
+      await this.getCategories()
+    },
+    async getCategories() {
+      this.categoryGroups = await this.$store.dispatch("allCategoryGroups")
+      this.categories = await this.$store.dispatch("allCategories")
+      console.log(this.categoryGroups)
+      console.log(this.categories)
+    }
+  },
+  created: function () {
+    this.$http.interceptors.response.use(undefined, async function (err) {
+      return await new Promise(function () {
+        if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
+          this.$store.dispatch("logout")
+        }
+        throw err;
+      });
+    });
+  },
+  async beforeMount() {
+    await this.getCategories()
   }
 }
-
 </script>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 
-nav {
-  padding: 30px;
+<style>
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
+@import '~materialize-css/dist/css/materialize.min.css';
 
 *,
 *::before,

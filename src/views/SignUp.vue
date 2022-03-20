@@ -15,9 +15,6 @@
       <br>
       <button class="btn waves-effect waves-light auth-submit" @click="signup">Отправить</button>
     </div>
-    <div class="error" v-if="error">
-      {{ error }}
-    </div>
   </div>
 </template>
 
@@ -28,7 +25,6 @@ export default {
     return {
       email: '',
       password: '',
-      error: '',
     }
   },
   methods: {
@@ -41,9 +37,10 @@ export default {
       try {
         await this.$store.dispatch('signup', formData)
         await this.$router.push("/")
+        this.$emit('update')
       } catch (e) {
-        console.log(e.response)
-        this.error = e.response.status === 401 ? "Пользователь не найден" : e.message
+        console.log(e)
+        this.$message('Введите правильный адрес электронной почты!')
       }
 
     },

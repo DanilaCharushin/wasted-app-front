@@ -21,7 +21,7 @@ export default {
                             const token = dataInResponse.token
                             const user = dataInResponse.username
                             localStorage.setItem('token', token)
-                            axios.defaults.headers.common['Authorization'] = token
+                            axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
                             commit('auth_success', token, user)
                             resolve(dataInResponse)
                         })
@@ -54,7 +54,7 @@ export default {
                             const token = dataInResponse.token
                             const user = dataInResponse.username
                             localStorage.setItem('token', token)
-                            axios.defaults.headers.common['Authorization'] = token
+                            axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
                             commit('auth_success', token, user)
                             resolve(dataInResponse)
                         })

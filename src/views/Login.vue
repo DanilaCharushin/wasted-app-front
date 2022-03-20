@@ -14,21 +14,23 @@
       </div>
       <br>
       <button class="btn waves-effect waves-light auth-submit" @click="login">Войти</button>
-    </div>
-    <div class="error" v-if="error">
-      {{ error }}
+      <br>
+      <div class="signup">Если еще нету аккаунта,
+        <router-link :to="'/signup'">регистрация</router-link>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import messages from "@/utils/messages";
+
 export default {
-  name: "LoginView",
+  name: "Login",
   data() {
     return {
       email: '',
       password: '',
-      error: '',
     }
   },
   methods: {
@@ -37,15 +39,27 @@ export default {
         email: this.email,
         password: this.password
       }
-      console.log(formData)
       try {
         await this.$store.dispatch('login', formData)
-        await this.$router.push("/")
+        this.$emit('update')
+        await this.$router.push('/')
+        this.$message('Авторизация прошла успешна!')
       } catch (e) {
-        console.log(e.response)
-        this.error = e.response.status === 401 ? "Пользователь не найден" : e.message
+        console.log(e)
+        this.$message('Введены неверные данные!')
+        if (this.$route.query.message) {
+          await this.$router.push('/login')
+        }
       }
     },
+    showMessage() {
+      if (messages[this.$route.query.message]) {
+        this.$message(messages[this.$route.query.message])
+      }
+    }
+  },
+  mounted() {
+    this.showMessage()
   },
 }
 </script>
@@ -71,7 +85,7 @@ button {
   max-width: 150px;
   margin: auto;
 }
-.error {
-  color: red;
+.signup {
+  margin: 0 auto;
 }
 </style>

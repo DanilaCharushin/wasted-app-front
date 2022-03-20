@@ -1,4 +1,6 @@
-# wasted-app-front
+# Egida-vue
+=======
+# vue_egida
 
 ## Project setup
 ```
@@ -22,3 +24,4 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+>>>>>>> init
