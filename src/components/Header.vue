@@ -1,33 +1,11 @@
 <template>
   <div>
     <div class="main-header">
-      <div class="welcome-header">
-        <img data-entity-type="file" src="@/assets/gerb.png" class="image" alt="Герб">
-        <div class="text-header">
-          <p class="welcome-header">МЭРИЯ ГОРОДА НОВОСИБИРСКА <br> ДЕПАРТАМЕНТ ОБРАЗОВАНИЯ</p>
-        </div>
-        <img data-entity-type="file" src="@/assets/gerb-2.png" class="image" alt="Герб 2">
-      </div>
       <div class="second-row">
         <div class="btn-container q-pa-md q-gutter-sm">
           <button v-if="isLoggedIn" class="btn waves-effect blue darken-4" @click.prevent="toMain">На главную</button>
-          <button v-if="isLoggedIn && getPermission === '15'" class="btn waves-effect blue darken-4"
-                  @click.prevent="toCard">Карточка
-          </button>
-          <button v-if="isLoggedIn && getPermission === '10'" class="btn waves-effect blue darken-4"
-                  @click.prevent="toDistr">Школы
-          </button>
-          <button v-if="isLoggedIn && getPermission < 10" class="btn waves-effect blue darken-4"
-                  @click.prevent="toDistr">Районы
-          </button>
           <button v-if="!isLoggedIn" class="btn waves-effect blue darken-4" @click.prevent="toLogin">Войти</button>
           <button v-else class="btn waves-effect blue darken-4" @click.prevent="logout">Выйти</button>
-        </div>
-        <div class="to-home-text">
-          <router-link to="/" class="router-text">
-            УПРАВЛЕНИЕ ОБЕСПЕЧЕНИЯ БЮДЖЕТНОГО ПРОЦЕССА,<br/> МОНИТОРИНГА ОРГАНИЗАЦИИ
-            ПИТАНИЯ И РЕСУРСНОГО СОПРОВОЖДЕНИЯ<br/> УЧРЕЖДЕНИЙ В СФЕРЕ ОБРАЗОВАНИЯ
-          </router-link>
         </div>
       </div>
     </div>
@@ -37,7 +15,6 @@
 <script>
 export default {
   name: "Header",
-  // components: {ToolBar},
   computed: {
     isLoggedIn: function () {
       return this.$store.getters.isLoggedIn
@@ -62,14 +39,6 @@ export default {
       if (this.$route.name !== 'home')
         await this.$router.push("/");
     },
-    async toCard() {
-      if (this.$route.name !== 'schoolcard')
-        await this.$router.push(`/schoolcard/${localStorage.getItem('inn')}`)
-    },
-    async toDistr() {
-      if (this.$route.name !== 'districts')
-        await this.$router.push("/districts");
-    }
   }
 }
 </script>

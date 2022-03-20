@@ -1,15 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import auth from './auth'
-import info from './info'
-import building from "./building"
-import school from "./school";
-import temperature from "./temperature";
-import character from './character'
-import docs from "./docs";
-import prescriptions from "./prescriptions";
-import orders from "./orders";
-import civil_defense from "./civil_defense";
+import category from "@/store/category";
+import waste from "@/store/waste";
 
 Vue.use(Vuex)
 
@@ -55,6 +48,6 @@ export default new Vuex.Store({
         permission: state => state.permission
     },
     modules: {
-        auth, info, building, school, temperature, character, docs, prescriptions, orders, civil_defense
+        auth, category, waste
     }
 })

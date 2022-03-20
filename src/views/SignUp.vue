@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="auth-card">
-      <h5>Вход</h5>
+      <h5>Регистрация</h5>
       <div class="input-field">
         <i class="material-icons prefix">account_circle</i>
         <input id="icon_prefix" type="text" v-model="email">
@@ -13,20 +13,14 @@
         <label for="vpn_key">Пароль</label>
       </div>
       <br>
-      <button class="btn waves-effect waves-light auth-submit" @click="login">Войти</button>
-      <br>
-      <div class="signup">Если еще нету аккаунта,
-        <router-link :to="'/signup'">регистрация</router-link>
-      </div>
+      <button class="btn waves-effect waves-light auth-submit" @click="signup">Отправить</button>
     </div>
   </div>
 </template>
 
 <script>
-import messages from "@/utils/messages";
-
 export default {
-  name: "Login",
+  name: "LoginView",
   data() {
     return {
       email: '',
@@ -34,42 +28,26 @@ export default {
     }
   },
   methods: {
-    async login() {
+    async signup() {
       const formData = {
         email: this.email,
         password: this.password
       }
+      console.log(formData)
       try {
-        await this.$store.dispatch('login', formData)
-        await this.$router.push('/')
-        this.$message('Авторизация прошла успешна!')
+        await this.$store.dispatch('signup', formData)
+        await this.$router.push("/")
       } catch (e) {
         console.log(e)
-        this.$message('Введены неверные данные!')
-        if (this.$route.query.message) {
-          await this.$router.push('/login')
-        }
+        this.$message('Введите правильный адрес электронной почты!')
       }
+
     },
-    showMessage() {
-      if (messages[this.$route.query.message]) {
-        this.$message(messages[this.$route.query.message])
-      }
-    }
-  },
-  mounted() {
-    this.showMessage()
   },
 }
 </script>
 
 <style scoped>
-/*.x {*/
-/*  max-width: 200px;*/
-/*  align-content: space-around;*/
-/*  margin-left: 20px;*/
-/*  margin-top: 50px;*/
-/*}*/
 .auth-card {
   display: flex;
   align-content: center;
@@ -89,8 +67,5 @@ h5 {
 button {
   max-width: 150px;
   margin: auto;
-}
-.signup {
-  margin: 0 auto;
 }
 </style>

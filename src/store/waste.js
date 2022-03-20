@@ -1,22 +1,22 @@
-import axios from "axios";
+import axios from 'axios'
 import {server_path} from "@/local_settings";
+
 
 export default {
     actions: {
-        async fetchTemperatures({commit}, inn) {
+        async allWastes({commit}) {
             try {
                 const token = localStorage.getItem('token')
                 return await new Promise((resolve, reject) => {
-                    axios.get(server_path + "/api/temperature",
+                    axios.get(server_path + "/wastes/",
                         {
                             headers: {
-                                "Authorization": "auth " + token,
                                 'Content-Type': 'application/json',
-                                "INN": inn
+                                'Authorization': 'Bearer ' + token,
                             }
                         })
                         .then(resp => {
-                            resolve(resp.data.data)
+                            resolve(resp.data)
                         })
                         .catch(err => {
                             reject(err)
@@ -27,20 +27,20 @@ export default {
                 throw e
             }
         },
-        async addTemperature({commit}, data) {
+        async createWaste({commit}, data) {
             try {
                 const token = localStorage.getItem('token')
                 return await new Promise((resolve, reject) => {
-                    axios.post(server_path + "/api/temperature/",
+                    axios.post(server_path + "/wastes/",
                         data,
                         {
                             headers: {
                                 'Content-Type': 'application/json',
-                                "Authorization": "auth " + token,
+                                'Authorization': 'Bearer ' + token,
                             }
                         })
                         .then(resp => {
-                            resolve(resp)
+                            resolve(resp.data)
                         })
                         .catch(err => {
                             reject(err)
@@ -51,20 +51,22 @@ export default {
                 throw e
             }
         },
-        async deleteTemperature({commit}, data) {
+        async deleteWaste({commit}, id) {
             try {
                 const token = localStorage.getItem('token')
                 return await new Promise((resolve, reject) => {
-                    axios.delete(server_path + "/api/temperature/",
+                    axios.delete(server_path + "/wastes/",
                         {
                             headers: {
                                 'Content-Type': 'application/json',
-                                'Authorization': 'auth ' + token,
-                                'data': JSON.stringify(data)
+                                'Authorization': 'Bearer ' + token,
+                            },
+                            data: {
+                                id: id
                             }
                         })
                         .then(resp => {
-                            resolve(resp)
+                            resolve(resp.data)
                         })
                         .catch(err => {
                             reject(err)
@@ -75,28 +77,5 @@ export default {
                 throw e
             }
         },
-        async updateTemperature({commit}, data) {
-            try {
-                const token = localStorage.getItem('token')
-                return await new Promise((resolve, reject) => {
-                    axios.put(server_path + "/api/temperature/", data,
-                        {
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': 'auth ' + token
-                            }
-                        })
-                        .then(resp => {
-                            resolve(resp)
-                        })
-                        .catch(err => {
-                            reject(err)
-                        })
-                })
-            } catch (e) {
-                commit('setError', e)
-                throw e
-            }
-        }
     }
 }

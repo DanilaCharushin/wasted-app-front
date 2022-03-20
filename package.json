@@ -1,5 +1,5 @@
 {
-  "name": "vue_egida",
+  "name": "wasted-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -53,5 +53,17 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "description": "=======",
+  "main": "babel.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DanilaCharushin/wasted-app-front.git"
+  },
+  "author": "Team Goroha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DanilaCharushin/wasted-app-front/issues"
+  },
+  "homepage": "https://github.com/DanilaCharushin/wasted-app-front#readme"
 }

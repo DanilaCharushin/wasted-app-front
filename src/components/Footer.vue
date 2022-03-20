@@ -1,14 +1,12 @@
 <template>
   <footer class="footer">
-          <div class="text"><p>Департамент образования мэрии города Новосибирска<br>
-            <strong>630099, город Новосибирск, ул.Красный проспект,  34</strong></p></div>
-<!--    <strong>Тел.: 227-45-00</strong>-->
+    Footer
   </footer>
 </template>
 
 <script>
 export default {
-name: "Footer"
+  name: "Footer"
 }
 </script>
 
@@ -26,7 +24,7 @@ footer {
   min-height: 131px;
 }
 
-.text{
+.text {
   margin: 0 auto;
   width: auto;
   color: white;

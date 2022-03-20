@@ -1,22 +1,37 @@
-import axios from "axios";
+import axios from 'axios'
 import {server_path} from "@/local_settings";
 
+
 export default {
+    state: {
+        categories: [],
+        categoryGroups: [],
+    },
+    mutations: {
+        setCategories(state, categories) {
+            state.categories = categories
+        },
+        setCategoryGroups(state, categoryGroups) {
+            state.categoryGroups = categoryGroups
+        },
+    },
+    getters: {
+        categories: state => state.categories,
+        categoryGroups: state => state.categoryGroups,
+    },
     actions: {
-        async fetchZPPP({commit}, {token, inn}) {
+        async allCategoryGroups({commit}) {
             try {
                 return await new Promise((resolve, reject) => {
-                    axios.get(server_path + "/api/zppp/",
+                    axios.get(server_path + "/categories_groups/",
                         {
                             headers: {
-                                "Authorization": "auth " + token,
-                                'Content-Type': 'application/json',
-                                'INN': inn,
-                                'get-all': 'get-all'
+                                'Content-Type': 'application/json'
                             }
                         })
                         .then(resp => {
-                            resolve(resp.data.data)
+                            commit('setCategoryGroups', resp.data)
+                            resolve(resp.data)
                         })
                         .catch(err => {
                             reject(err)
@@ -27,21 +42,20 @@ export default {
                 throw e
             }
         },
-        async fetchZPPPById({commit}, {inn, id}) {
+        async allCategories({commit}) {
             try {
                 const token = localStorage.getItem('token')
                 return await new Promise((resolve, reject) => {
-                    axios.get(server_path + "/api/zppp/",
+                    axios.get(server_path + "/categories/",
                         {
                             headers: {
-                                "Authorization": "auth " + token,
                                 'Content-Type': 'application/json',
-                                'INN': inn,
-                                'zppp-id': id
+                                'Authorization': 'Bearer ' + token,
                             }
                         })
                         .then(resp => {
-                            resolve(resp.data.data)
+                            commit('setCategories', resp.data)
+                            resolve(resp.data)
                         })
                         .catch(err => {
                             reject(err)
@@ -52,21 +66,20 @@ export default {
                 throw e
             }
         },
-        async createZPPP({commit}, {file, inn}) {
+        async createCategory({commit}, data) {
             try {
                 const token = localStorage.getItem('token')
                 return await new Promise((resolve, reject) => {
-                    axios.post(server_path + "/api/zppp/",
-                        file,
+                    axios.post(server_path + "/categories/",
+                        data,
                         {
                             headers: {
                                 'Content-Type': 'application/json',
-                                "Authorization": "auth " + token,
-                                'INN': inn
+                                'Authorization': 'Bearer ' + token,
                             }
                         })
                         .then(resp => {
-                            resolve(resp)
+                            resolve(resp.data)
                         })
                         .catch(err => {
                             reject(err)
@@ -77,22 +90,22 @@ export default {
                 throw e
             }
         },
-        async updateZPPP({commit}, {file, inn, id}) {
+        async deleteCategory({commit}, id) {
             try {
                 const token = localStorage.getItem('token')
                 return await new Promise((resolve, reject) => {
-                    axios.put(server_path + "/api/zppp/",
-                        file,
+                    axios.delete(server_path + "/categories/",
                         {
                             headers: {
                                 'Content-Type': 'application/json',
-                                "Authorization": "auth " + token,
-                                'INN': inn,
-                                'zppp-id': id
+                                'Authorization': 'Bearer ' + token,
+                            },
+                            data: {
+                                id: id
                             }
                         })
                         .then(resp => {
-                            resolve(resp)
+                            resolve(resp.data)
                         })
                         .catch(err => {
                             reject(err)
@@ -103,30 +116,5 @@ export default {
                 throw e
             }
         },
-        async deleteZPPP({commit}, {inn, id}) {
-            try {
-                const token = localStorage.getItem('token')
-                return await new Promise((resolve, reject) => {
-                    axios.delete(server_path + "/api/zppp/",
-                        {
-                            headers: {
-                                'Content-Type': 'application/json',
-                                "Authorization": "auth " + token,
-                                'INN': inn,
-                                'zppp-id': id
-                            }
-                        })
-                        .then(resp => {
-                            resolve(resp)
-                        })
-                        .catch(err => {
-                            reject(err)
-                        })
-                })
-            } catch (e) {
-                commit('setError', e)
-                throw e
-            }
-        }
     }
 }

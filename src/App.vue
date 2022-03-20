@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="wrapper">
     <Header class="header" :key="key" @update="update"/>
-    <router-view class="content"/>
+    <router-view @update="update" class="content" :categoryGroups="categoryGroups" :categories="categories"/>
     <Footer class="footer"/>
   </div>
 </template>
@@ -9,23 +9,24 @@
 <script>
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import {server_path} from "@/local_settings";
 
 export default {
   components: {Footer, Header},
   data: () => ({
-    key: 0
+    key: 0,
+    categoryGroups: [],
+    categories: [],
   }),
   methods: {
-    update() {
+    async update() {
       this.key += 1
+      await this.getCategories()
     },
-    showDoc(url) {
-      const link = document.createElement('a');
-      link.href = server_path + url;
-      link.target = '_blank'
-      document.body.appendChild(link);
-      link.click();
+    async getCategories() {
+      this.categoryGroups = await this.$store.dispatch("allCategoryGroups")
+      this.categories = await this.$store.dispatch("allCategories")
+      console.log(this.categoryGroups)
+      console.log(this.categories)
     }
   },
   created: function () {
@@ -37,6 +38,9 @@ export default {
         throw err;
       });
     });
+  },
+  async beforeMount() {
+    await this.getCategories()
   }
 }
 </script>
