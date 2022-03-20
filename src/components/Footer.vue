@@ -1,6 +1,6 @@
 <template>
   <footer class="footer">
-    Footer
+    <span class="text">Данный проект является макетом. Для дальнейшего использования необходимы доработки!</span>
   </footer>
 </template>
 

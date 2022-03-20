@@ -1,6 +1,5 @@
 <template>
-
-  <div v-if="currentCategories.length">
+  <div v-if="currentCategories.length" class="container center">
     <h5>Категорий из данной группы</h5>
     <div class="list">
       <router-link class="list-item" v-for="category in currentCategories" :key="category.id"
@@ -9,7 +8,9 @@
       </router-link>
     </div>
   </div>
-  <div v-else><h5>Категории в данной группе отсутствуют</h5></div>
+  <div v-else>
+    <h5>Категории в данной группе отсутствуют</h5>
+  </div>
 </template>
 
 <script>
@@ -35,8 +36,8 @@ export default {
 .list-item {
   position: relative;
   display: block;
-  padding: 10px 15px;
-  margin: -1px 150px;
+  padding: 10px;
+  margin: -1px auto;
   background-color: #fff;
   border: 1px solid #ddd;
   text-decoration: none;

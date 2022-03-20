@@ -3,7 +3,6 @@ import App from './App.vue'
 import router from "@/router";
 import store from './store/index'
 import Loader from "@/components/Loader"
-import Vuelidate from 'vuelidate'
 import messagePlugin from '@/utils/message-plugin.js'
 import './quasar'
 import 'materialize-css/dist/js/materialize.min.js'
@@ -21,7 +20,6 @@ if (token) {
 Vue.config.productionTip = false
 Vue.component('Loader', Loader)
 Vue.use(messagePlugin)
-Vue.use(Vuelidate)
 
 
 new Vue({

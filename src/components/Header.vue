@@ -1,12 +1,11 @@
 <template>
-  <div>
-    <div class="main-header">
-      <div class="second-row">
-        <div class="btn-container q-pa-md q-gutter-sm">
-          <button v-if="isLoggedIn" class="btn waves-effect blue darken-4" @click.prevent="toMain">На главную</button>
-          <button v-if="!isLoggedIn" class="btn waves-effect blue darken-4" @click.prevent="toLogin">Войти</button>
-          <button v-else class="btn waves-effect blue darken-4" @click.prevent="logout">Выйти</button>
-        </div>
+  <div class="main-header">
+    <div class="welcome-header">
+      <div class="app-name">Wasted App</div>
+      <div class="btn-container q-pa-md q-gutter-sm">
+        <button v-if="isLoggedIn" class="btn waves-effect blue darken-4" @click.prevent="toMain">На главную</button>
+        <button v-if="!isLoggedIn" class="btn waves-effect blue darken-4" @click.prevent="toLogin">Войти</button>
+        <button v-else class="btn waves-effect blue darken-4" @click.prevent="logout">Выйти</button>
       </div>
     </div>
   </div>
@@ -19,12 +18,9 @@ export default {
     isLoggedIn: function () {
       return this.$store.getters.isLoggedIn
     },
-    getPermission: function () {
-      return this.$store.getters.permission || localStorage.getItem('permission')
-    }
   },
   methods: {
-    logout: async function () {
+    async logout () {
       await this.$store.dispatch('logout')
           .then(() => {
             this.$emit('update')
@@ -45,63 +41,41 @@ export default {
 
 <style scoped>
 
-.router-text {
-  color: white;
-  text-decoration: none;
-  font-size: calc(8px + 4 * (100vw / 1440));
-}
-
-.second-row {
-  position: relative;
-  display: inline-flex;
-  width: 100%;
-  min-height: 50px;
-}
-
 .btn-container {
   min-height: 0;
+  margin: 0 15px;
 }
 
-.to-home-text {
-  width: 60%;
-  margin: auto;
+.app-name {
+  margin: 0 10px;
+  justify-items: center;
   text-align: center;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  font-size: 40px;
+  padding-left: 50px;
 }
 
-.image {
-  margin: 0 20px;
+.btn {
+  margin: 0 10px;
 }
 
 .main-header {
   background-image: url("~@/assets/fon2.jpg");
   background-repeat: no-repeat;
   background-size: cover;
+  padding: 10px 0;
 }
 
 .welcome-header {
   display: flex;
   color: white;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   text-align: center;
   font-size: calc(12px + 4 * (100vw / 1440));
   margin-bottom: 10px;
 }
 
 @media (max-width: 480px) {
-  .image {
-    width: 20%;
-    height: 20%;
-  }
-
-  .to-home-text {
-    margin: auto 10px;
-    font-size: xx-small;
-  }
 
   .welcome-header {
     font-size: small;
@@ -114,16 +88,7 @@ export default {
     flex-direction: column;
   }
 
-  /*.router-text {*/
-  /*  font-size: medium;*/
-  /*}*/
 }
 
-/*@media (max-width: 830px) {*/
-/*  .router-text {*/
-/*    font-size: small;*/
-/*  }*/
-
-/*}*/
 
 </style>

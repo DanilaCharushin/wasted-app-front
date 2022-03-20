@@ -37,6 +37,7 @@ export default {
       try {
         await this.$store.dispatch('signup', formData)
         await this.$router.push("/")
+        this.$emit('update')
       } catch (e) {
         console.log(e)
         this.$message('Введите правильный адрес электронной почты!')

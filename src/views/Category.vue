@@ -2,28 +2,38 @@
   <div class="container">
     <Loader v-if="loading"/>
     <div v-else>
-      <h3>Категория "{{ nameCategory }}"</h3>
-      <div>
-        <div class="new-category q-pa-md">
-          <h5>Добавить трату</h5>
-          <div class="q-gutter-sm row">
-            <q-input type="text" placeholder="Введите название" v-model="newWasteName">
-            </q-input>
-            <q-input type="text" placeholder="Введите сумму" v-model="newAmount">
-            </q-input>
-            <button class="btn waves-effect green lighten-1" @click.prevent="createNewWaste">Добавить трату
-            </button>
-          </div>
+      <h3>Категория {{ nameCategory }}</h3>
+      <div class="center container">
+        <h5>Добавление</h5>
+        <div class="q-gutter-sm row">
+          <q-input type="text" placeholder="Введите название" v-model="newWasteName"/>
+          <q-input type="text" placeholder="Введите сумму" v-model="newAmount"/>
+          <button class="btn waves-effect green lighten-1" @click.prevent="createNewWaste">Добавить трату
+          </button>
+        </div>
+      </div>
+      <div v-if="allWastes.length" class="center container">
+        <h5>Удаление</h5>
+        <div class="">
+          <q-input type="text" placeholder="Введите название" v-model="deletedName">
+            <template v-slot:append>
+              <button class="btn waves-effect red lighten-1" @click.prevent="deleteWaste">Удалить трату
+              </button>
+            </template>
+          </q-input>
         </div>
       </div>
       <q-table
+          v-if="allWastes.length"
           :data="allWastes"
           :columns="columns"
+          dense
           row-key="name"
           no-data-label="I didn't find anything for you"
           selection="single"
           :selected.sync="selected"
       />
+      <h5 class="center" v-else>Траты в данной категории отсутствуют</h5>
       <div>
         <button class="btn waves-effect red lighten-1" @click.prevent="deleteCategory">Удалить категорию
         </button>
@@ -35,11 +45,13 @@
 <script>
 export default {
   name: "CreateCategory",
-  props: ['id'],
+  props: ['id', 'categories'],
   data: () => ({
     loading: true,
     selectedCategoryId: null,
     newWasteName: '',
+    deletedName: '',
+    nameCategory: '',
     newAmount: null,
     allWastes: [],
     selected: [],
@@ -49,11 +61,17 @@ export default {
         name: 'name',
         label: 'Трата',
         align: 'left',
-        field: val => val.name,
+        field: 'name',
         required: true,
       },
-      {name: 'amount', align: 'center', label: 'Сумма', field: val => val.amount, sortable: true},
-      {name: 'created_at', align: 'center', label: 'Дата', field: val => val.created_at}
+      {name: 'amount', align: 'center', label: 'Сумма', field: 'amount', sortable: true},
+      {
+        name: 'created_at',
+        align: 'center',
+        label: 'Дата',
+        field: 'created_at',
+        format: value => new Date(value).toUTCString()
+      }
     ]
   }),
   methods: {
@@ -68,6 +86,8 @@ export default {
         console.log(resp)
         this.allWastes.push(resp)
         this.$message("Трата успешно записана!")
+        this.newWasteName = ''
+        this.newAmount = null
       } catch (e) {
         this.$message("Произошла ошибка!")
       }
@@ -85,12 +105,32 @@ export default {
         this.$message("Произошла ошибка!")
         console.log(e)
       }
+    },
+    async deleteWaste() {
+      try {
+        const deletedId = this.allWastes.find(value => value.name === this.deletedName).id
+        await this.$store.dispatch("deleteWaste", deletedId)
+        await this.getAllWastes()
+        this.$message("Категория успешно удалена!")
+        this.deletedName = ''
+      } catch (e) {
+        this.$message("Произошла ошибка!")
+        console.log(e)
+      }
+    },
+    async getAllWastes() {
+      let resp = await this.$store.dispatch('allWastes')
+      this.allWastes = resp.filter(value => value.category.id == this.id)
     }
   },
   async mounted() {
-    this.nameCategory = this.$store.getters.categories.filter(value => value.id == this.id)[0].name
-    let resp = await this.$store.dispatch('allWastes')
-    this.allWastes = resp.filter(value => value.category.id == this.id)
+    try {
+      this.nameCategory = '"' + this.categories.filter(value => value.id == this.id)[0].name + '"'
+    } catch (e) {
+      console.log(e)
+      this.nameCategory = ''
+    }
+    await this.getAllWastes()
     this.loading = false
   },
 }

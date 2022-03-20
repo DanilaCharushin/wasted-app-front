@@ -41,6 +41,7 @@ export default {
       }
       try {
         await this.$store.dispatch('login', formData)
+        this.$emit('update')
         await this.$router.push('/')
         this.$message('Авторизация прошла успешна!')
       } catch (e) {
@@ -64,12 +65,6 @@ export default {
 </script>
 
 <style scoped>
-/*.x {*/
-/*  max-width: 200px;*/
-/*  align-content: space-around;*/
-/*  margin-left: 20px;*/
-/*  margin-top: 50px;*/
-/*}*/
 .auth-card {
   display: flex;
   align-content: center;

@@ -1,14 +1,14 @@
 <template>
   <div class="container">
-    <div class="q-pa-md">
+    <div class="q-pa-md center">
       <h5>Текущая группа категорий: </h5>
-      <select style="display: block" v-model="selectedCategoryId" @change.prevent="getCategoriesById">
+      <select v-model="selectedCategoryId" @change.prevent="getCategoriesById">
         <option v-for="category in categoryGroups" :key="category.id" :value="category.id">
           {{ category.name }}
         </option>
       </select>
     </div>
-    <div class="q-gutter-md" v-if="selectedCategoryId">
+    <div class="q-gutter-md center" v-if="selectedCategoryId">
       <div class="new-category" style="max-width: 600px">
         <q-input type="text" placeholder="Введите название" v-model="newCategoryName">
           <template v-slot:after>
@@ -55,6 +55,7 @@ export default {
         this.currentCategories.push(resp)
         this.$emit('update')
         this.$message("Категория успешно создана!")
+        this.newCategoryName = ''
       } catch (e) {
         this.$message("Произошла ошибка!")
       }
@@ -82,5 +83,10 @@ export default {
 <style scoped>
 .new-category {
   margin: 40px auto;
+}
+select {
+  display: flex;
+  justify-content: center;
+  text-align: center;
 }
 </style>

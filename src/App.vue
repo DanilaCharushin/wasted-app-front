@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="wrapper">
-    <Header class="header" :key="key" @update="update"/>
+    <Header :key="key" @update="update" class="header"/>
     <router-view @update="update" class="content" :categoryGroups="categoryGroups" :categories="categories"/>
     <Footer class="footer"/>
   </div>
